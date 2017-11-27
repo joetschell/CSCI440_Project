@@ -40,9 +40,10 @@ serverSocket = socket(AF_INET, SOCK_DGRAM)
 serverSocket.bind(('', serverPort))
 print ("Starting service listening on port <" + str(serverPort) + ">")
 count = 0
+escape = ""
 
 #when a connection request is recieved, a new socket is created
-while 1:
+while escape != "quit":
     message, clientAddress = serverSocket.recvfrom(2048)
     print ("Socket successfully opened from client, sending packets now.")
     print ("message: " + message);
@@ -50,6 +51,19 @@ while 1:
         while count < 10:
             send(createPacket(count, clientAddress[0], clientAddress[1], serverPort))
             count += 1
-connectionSocket.close();
+
+#Specify whether to run another test or to quit the program
+    while 1:
+        escape = raw_input("Hit ENTER to run another test or type \"quit\" to stop\n")
+        if(escape == "quit"):
+           print ("Thank You")
+           break
+        if(escape != "" and escape != "quit"):
+            escape = ""
+        elif(escape == ""):
+            print ("Ready for new test2.")
+            break
+#reset packet count for subsequent tests  
+    count = 0
 #End of Packet Error Rate Measuring
 ##########################################################################################################
