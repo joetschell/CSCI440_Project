@@ -31,7 +31,7 @@ def createPDVPacket(seqNum, dstIP, dstPort, srcPort):
     timestamp = datetime.now().strftime("%H:%M:%S.%f")
     rawData = file.read()
     if(rawData[-1] == '\n'):
-        rawData = rawData[:-2]
+        rawData = rawData[:-1]
     rawData = rawData + " " + timestamp + " " + str(seqNum)
     print (rawData)
     packet = IP(dst=dstIP, proto=6) / TCP(sport=srcPort, dport=dstPort) / Raw(load=rawData)
