@@ -12,7 +12,7 @@ from shutil import copyfile
 from socket import *
 from time import gmtime, strftime, localtime, sleep
 
-def createPacket(seqNum, dstIP, dstPort, srcPort):
+def createPERPacket(seqNum, dstIP, dstPort, srcPort):
     #read from the packet file and save it to variable rawData with timestamp and sequence number
     file = open("packTemplate.txt", "r")
     timestamp = datetime.now().strftime("%H:%M:%S.%f")
@@ -25,6 +25,20 @@ def createPacket(seqNum, dstIP, dstPort, srcPort):
     #packet.show()
     file.close()
     return packet
+
+def createPDVPacket(seqNum, dstIP, dstPort, srcPort):
+    file = open("packTemplate.txt", "r")
+    timestamp = datetime.now().strftime("%H:%M:%S.%f")
+    rawData = file.read()
+    if(rawData[-1] == '\n'):
+        rawData = rawData[:-2]
+    rawData = rawData + " " + timestamp + " " + str(seqNum)
+    print (rawData)
+    packet = IP(dst=dstIP, proto=6) / TCP(sport=srcPort, dport=dstPort) / Raw(load=rawData)
+    #packet.show()
+    file.close()
+    return packet
+
 
 ##Take input from user off the command line
 parser = optparse.OptionParser()
@@ -51,12 +65,16 @@ serverPort = options.port
 
 
 #########################################################################################################
+#
+#                           PACKET ERROR RATE TEST
+#
+##########################################################################################################
 #Establishing UDP connection for Packet Error Rate measuring
 #creating socket with IPV4 and UDP params, and binding it to serverPort
 if(options.test.upper() == "PER"):
     serverSocket = socket(AF_INET, SOCK_DGRAM)
     serverSocket.bind(('', serverPort))
-    print ("Starting service listening on port <" + str(serverPort) + ">")
+    print ("Starting PER test on port <" + str(serverPort) + ">")
     count = 0
     iterator = 0
     escape = ""
@@ -70,12 +88,12 @@ if(options.test.upper() == "PER"):
 
         time.sleep(.2)
         while iterator < count:
-            send(createPacket(iterator, clientAddress[0], clientAddress[1], serverPort))
+            send(createPERPacket(iterator, clientAddress[0], clientAddress[1], serverPort))
             iterator += 1
 
     #Specify whether to run another test or to quit the program
         while 1:
-            escape = raw_input("Hit ENTER to run another test or type \"quit\" to stop\n")
+            escape = raw_input("Hit ENTER to run another PER test or type \"quit\" to stop\n")
             if(escape == "quit"):
                 print ("Thank You")
                 break
@@ -88,4 +106,53 @@ if(options.test.upper() == "PER"):
         count = 0
         iterator = 0
     #End of Packet Error Rate Measuring
-    ##########################################################################################################
+
+
+
+#################################################################################################################
+#
+#                           PACKET DELAY VARIATION TEST
+#
+#################################################################################################################
+if(options.test.upper() == "PDV"):
+    #Establishing TCP connection for Packet Delay Variation measuring
+    serverSocket = socket(AF_INET, SOCK_STREAM)
+    serverSocket.bind(('', serverPort))
+    serverSocket.listen(1)
+    print ("Starting PDV Test on port <" + str(serverPort) + ">")
+    escape = ""
+    count = 0
+    iterator = 0
+
+     while escape != "quit": 
+        connectionSocket, clientAddress = serverSocket.accept()
+        print ("Socket successfully opened from client")
+        count = int(connectionSocket.recv(2048))
+
+        print ("count: " + str(count))
+        print ("Sending Packets for PDV test...");
+        time.sleep(2)
+        while iterator < count:
+            send(createPDVPacket(iterator, clientAddress[0], clientAddress[1], serverPort))
+            iterator += 1
+
+        #Specify whether to run another test or to quit the program
+        while 1:
+            escape = raw_input("Hit ENTER to run another PDV test or type \"quit\" to stop\n")
+            if(escape == "quit"):
+                print ("Thank You")
+                break
+            if(escape != "" and escape != "quit"):
+                escape = ""
+            elif(escape == ""):
+                print ("Ready for new test.")
+                break
+    #reset packet count for subsequent tests  
+        count = 0
+        iterator = 0
+    #End of Packet Error Rate Measuring
+        
+connectionSocket.close()
+
+
+
