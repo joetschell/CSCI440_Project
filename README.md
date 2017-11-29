@@ -3,11 +3,13 @@
 
 ### Usage ###
 ```bash
-sudo ./server.py -p <port> 
+sudo ./server.py -p <port> -t <testType>
 ```
+Need to add option to press ENTER on the client to begin the process
+
 
 ```bash
-sudo ./testClient.py -i <IP> -p <port> -c <packetCount>
+sudo ./testClient.py -i <IP> -p <port> -c <packetCount> -t <testType>
 ```
 
 

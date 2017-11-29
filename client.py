@@ -44,6 +44,7 @@ if (options.test.upper() != "PER" and options.test.upper() != "PDV"):
 
 if(options.test.upper() == "PER"):
     escape = ""
+    begin = "a"
     #allows the user to keep running tests until "quit" is enterd
     while escape != "quit":
         serverName = options.ip
@@ -51,6 +52,15 @@ if(options.test.upper() == "PER"):
         file = open("sniffed.txt", "w")
         clientSocket = socket(AF_INET,SOCK_DGRAM)
         print ("Test initialized, hit ENTER to begin")
+        #Wait for user to press ENTER before beginning the test
+        while 1:
+            begin = raw_input("")
+            if(begin != ""):
+                print("Invalid value")
+            elif(begin == ""):
+                print ("Starting test...")
+                break
+
         message = str(options.count)
         clientSocket.sendto(message,(serverName, serverPort))
         pkts = sniff(filter="host " +  options.ip + " and port " + str(options.port) + 

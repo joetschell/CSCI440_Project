@@ -124,7 +124,7 @@ if(options.test.upper() == "PDV"):
     count = 0
     iterator = 0
 
-     while escape != "quit": 
+    while escape != "quit": 
         connectionSocket, clientAddress = serverSocket.accept()
         print ("Socket successfully opened from client")
         count = int(connectionSocket.recv(2048))
@@ -151,8 +151,7 @@ if(options.test.upper() == "PDV"):
         count = 0
         iterator = 0
     #End of Packet Error Rate Measuring
-        
-connectionSocket.close()
+    connectionSocket.close()
 
 
 
