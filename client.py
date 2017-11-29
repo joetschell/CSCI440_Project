@@ -43,7 +43,7 @@ while escape != "quit":
     message = raw_input('What test do u wanna run?: ') + " " + str(options.count)
     clientSocket.sendto(message,(serverName, serverPort))
     pkts = sniff(filter="host " +  options.ip + " and port " + str(options.port) + 
-                    " and ip and udp", count=options.count*2, prn=custom_action)
+                    " and ip and udp", count=options.count, prn=custom_action)
 
 #Specify whether to run another test or to quit the program
     while 1:
