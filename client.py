@@ -20,6 +20,7 @@ parser = optparse.OptionParser()
 parser.add_option('-i', '--ip', dest='ip', help='IP to sniff')
 parser.add_option('-p', '--port', dest='port', help='Port to sniff', type=int)
 parser.add_option('-c', '--count', dest='count', help='Number of packets to receive', type=int)
+parser.add_option('-t', '--test', dest='test', help='Kind of test to run')
 
 (options, args) = parser.parse_args()
 
@@ -32,6 +33,15 @@ if options.port is None:
 if options.count is None:
     options.count = (raw_input('Enter packet count to receive: '))
 
+if options.test is None:
+    options.test = (raw_input('Enter type of test to run [PER/PDV]: '))
+
+if (options.test.upper() != "PER" and options.test.upper() != "PDV"):
+    while 1:
+        options.test = (raw_input('Enter type of test to run [PER/PDV]: '))
+        if (options.test.upper() == "PER" or options.test.upper() == "PDV"):
+            break
+
 
 escape = ""
 #allows the user to keep running tests until "quit" is enterd
@@ -40,7 +50,8 @@ while escape != "quit":
     serverPort = options.port
     file = open("sniffed.txt", "w")
     clientSocket = socket(AF_INET,SOCK_DGRAM)
-    message = raw_input('What test do u wanna run?: ') + " " + str(options.count)
+    print ("Test initialized, hit ENTER to begin")
+    message = str(options.count)
     clientSocket.sendto(message,(serverName, serverPort))
     pkts = sniff(filter="host " +  options.ip + " and port " + str(options.port) + 
                     " and ip and udp", count=options.count, prn=custom_action)
