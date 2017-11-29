@@ -42,32 +42,34 @@ if (options.test.upper() != "PER" and options.test.upper() != "PDV"):
         if (options.test.upper() == "PER" or options.test.upper() == "PDV"):
             break
 
+if(options.test.upper() == "PER"):
+    escape = ""
+    #allows the user to keep running tests until "quit" is enterd
+    while escape != "quit":
+        serverName = options.ip
+        serverPort = options.port
+        file = open("sniffed.txt", "w")
+        clientSocket = socket(AF_INET,SOCK_DGRAM)
+        print ("Test initialized, hit ENTER to begin")
+        message = str(options.count)
+        clientSocket.sendto(message,(serverName, serverPort))
+        pkts = sniff(filter="host " +  options.ip + " and port " + str(options.port) + 
+                        " and ip and udp", count=options.count, prn=custom_action)
 
-escape = ""
-#allows the user to keep running tests until "quit" is enterd
-while escape != "quit":
-    serverName = options.ip
-    serverPort = options.port
-    file = open("sniffed.txt", "w")
-    clientSocket = socket(AF_INET,SOCK_DGRAM)
-    print ("Test initialized, hit ENTER to begin")
-    message = str(options.count)
-    clientSocket.sendto(message,(serverName, serverPort))
-    pkts = sniff(filter="host " +  options.ip + " and port " + str(options.port) + 
-                    " and ip and udp", count=options.count, prn=custom_action)
-
-#Specify whether to run another test or to quit the program
-    while 1:
-        escape = raw_input("Hit ENTER to run another test or type \"quit\" to stop\n")
-        if(escape == "quit"):
-           print ("Thank You")
-           break
-        if(escape != "" and escape != "quit"):
-            escape = ""
-        elif(escape == ""):
-            print ("Ready for new test.")
-            break
-file.close()
-clientSocket.close()
+    #Specify whether to run another test or to quit the program
+        while 1:
+            escape = raw_input("Hit ENTER to run another test or type \"quit\" to stop\n")
+            if(escape == "quit"):
+                print ("Thank You")
+                break
+            if(escape != "" and escape != "quit"):
+                escape = ""
+            elif(escape == ""):
+                print ("Ready for new test.")
+                break
+    file.close()
+    clientSocket.close()
 
 
+#elif(options.test.upper() == "PDV"):
+    ##for ian to work on for PDV
