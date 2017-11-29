@@ -6,6 +6,8 @@
 sudo ./server.py -p <port> 
 ```
 
-```sudo ./testClient.py -i <IP> -p <port> -c <packetCount>
+```bash
+sudo ./testClient.py -i <IP> -p <port> -c <packetCount>
+```
 
 
