@@ -26,12 +26,15 @@ def createPacket(seqNum, dstIP, dstPort, srcPort):
 ##Take input from user off the command line
 parser = optparse.OptionParser()
 parser.add_option('-g', '--generate', dest='generate', help='Use this to generate packets')
-parser.add_option('-p', '--protocol', dest='protocol', help='Protocol to use')
+parser.add_option('-p', '--port', dest='port', help='Port to use', type=int)
 
 (options, args) = parser.parse_args()
 
+if options.port is None:
+    options.port = int(raw_input('Enter Port: '))
+
 #port number > 5000
-serverPort = 13037
+serverPort = options.port
 
 #########################################################################################################
 #Establishing UDP connection for Packet Error Rate measuring
@@ -40,17 +43,20 @@ serverSocket = socket(AF_INET, SOCK_DGRAM)
 serverSocket.bind(('', serverPort))
 print ("Starting service listening on port <" + str(serverPort) + ">")
 count = 0
+iterator = 0
 escape = ""
 
 #when a connection request is recieved, a new socket is created
 while escape != "quit":
     message, clientAddress = serverSocket.recvfrom(2048)
-    print ("Socket successfully opened from client, sending packets now.")
-    print ("message: " + message);
-    if(message == "PER"):
-        while count < 10:
-            send(createPacket(count, clientAddress[0], clientAddress[1], serverPort))
-            count += 1
+    count = int(message[4:])
+    print ("count: " + message[4:])
+    print ("Sending Packets for " + message[:3] + " test...");
+    if(message[:3] == "PER"):
+        time.sleep(.2)
+        while iterator < count:
+            send(createPacket(iterator, clientAddress[0], clientAddress[1], serverPort))
+            iterator += 1
 
 #Specify whether to run another test or to quit the program
     while 1:
@@ -61,9 +67,10 @@ while escape != "quit":
         if(escape != "" and escape != "quit"):
             escape = ""
         elif(escape == ""):
-            print ("Ready for new test2.")
+            print ("Ready for new test.")
             break
 #reset packet count for subsequent tests  
     count = 0
+    iterator = 0
 #End of Packet Error Rate Measuring
 ##########################################################################################################

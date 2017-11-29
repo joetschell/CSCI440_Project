@@ -3,7 +3,9 @@
 
 ### Usage ###
 ```bash
-sudo ./server.py 
+sudo ./server.py -p <port> 
 ```
+
+```sudo ./testClient.py -i <IP> -p <port> -c <packetCount>
 
 
