@@ -1,80 +1,10 @@
-ianjoecolton 21:39:16.562198 0
-ianjoecolton 21:39:16.562198 0
-ianjoecolton 21:39:16.612532 1
-ianjoecolton 21:39:16.612532 1
-ianjoecolton 21:39:16.652523 2
-ianjoecolton 21:39:16.652523 2
-ianjoecolton 21:39:16.692515 3
-ianjoecolton 21:39:16.692515 3
-ianjoecolton 21:39:16.736514 4
-ianjoecolton 21:39:16.736514 4
-ianjoecolton 21:39:16.784525 5
-ianjoecolton 21:39:16.784525 5
-ianjoecolton 21:39:16.828526 6
-ianjoecolton 21:39:16.828526 6
-ianjoecolton 21:39:16.876514 7
-ianjoecolton 21:39:16.876514 7
-ianjoecolton 21:39:16.920542 8
-ianjoecolton 21:39:16.920542 8
-ianjoecolton 21:39:16.956491 9
-ianjoecolton 21:39:16.956491 9
-ianjoecolton 21:39:17.000508 10
-ianjoecolton 21:39:17.000508 10
-ianjoecolton 21:39:17.040501 11
-ianjoecolton 21:39:17.040501 11
-ianjoecolton 21:39:17.088570 12
-ianjoecolton 21:39:17.088570 12
-ianjoecolton 21:39:17.124511 13
-ianjoecolton 21:39:17.124511 13
-ianjoecolton 21:39:17.164498 14
-ianjoecolton 21:39:17.164498 14
-ianjoecolton 21:39:17.212524 15
-ianjoecolton 21:39:17.212524 15
-ianjoecolton 21:39:17.252510 16
-ianjoecolton 21:39:17.252510 16
-ianjoecolton 21:39:17.296515 17
-ianjoecolton 21:39:17.296515 17
-ianjoecolton 21:39:17.340519 18
-ianjoecolton 21:39:17.340519 18
-ianjoecolton 21:39:17.376503 19
-ianjoecolton 21:39:17.376503 19
-ianjoecolton 21:39:17.412513 20
-ianjoecolton 21:39:17.412513 20
-ianjoecolton 21:39:17.456512 21
-ianjoecolton 21:39:17.456512 21
-ianjoecolton 21:39:17.496523 22
-ianjoecolton 21:39:17.496523 22
-ianjoecolton 21:39:17.540587 23
-ianjoecolton 21:39:17.540587 23
-ianjoecolton 21:39:17.584518 24
-ianjoecolton 21:39:17.584518 24
-ianjoecolton 21:39:17.628500 25
-ianjoecolton 21:39:17.628500 25
-ianjoecolton 21:39:17.668554 26
-ianjoecolton 21:39:17.668554 26
-ianjoecolton 21:39:17.704510 27
-ianjoecolton 21:39:17.704510 27
-ianjoecolton 21:39:17.740520 28
-ianjoecolton 21:39:17.740520 28
-ianjoecolton 21:39:17.776494 29
-ianjoecolton 21:39:17.776494 29
-ianjoecolton 21:39:17.824526 30
-ianjoecolton 21:39:17.824526 30
-ianjoecolton 21:39:17.872540 31
-ianjoecolton 21:39:17.872540 31
-ianjoecolton 21:39:17.916509 32
-ianjoecolton 21:39:17.916509 32
-ianjoecolton 21:39:17.960565 33
-ianjoecolton 21:39:17.960565 33
-ianjoecolton 21:39:18.000508 34
-ianjoecolton 21:39:18.000508 34
-ianjoecolton 21:39:18.056508 35
-ianjoecolton 21:39:18.056508 35
-ianjoecolton 21:39:18.092543 36
-ianjoecolton 21:39:18.092543 36
-ianjoecolton 21:39:18.132516 37
-ianjoecolton 21:39:18.132516 37
-ianjoecolton 21:39:18.176520 38
-ianjoecolton 21:39:18.176520 38
-ianjoecolton 21:39:18.224531 39
-ianjoecolton 21:39:18.224531 39
+ianjoecolton 0
+ianjoecolton 0
+ianjoecolton 1
+ianjoecolton 1
+ianjoecolton 2
+ianjoecolton 2
+ianjoecolton 3
+ianjoecolton 3
+ianjoecolton 4
+ianjoecolton 4

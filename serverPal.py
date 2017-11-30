@@ -15,11 +15,10 @@ from time import gmtime, strftime, localtime, sleep
 def createPERPacket(seqNum, dstIP, dstPort, srcPort):
     #read from the packet file and save it to variable rawData with timestamp and sequence number
     file = open("packTemplate.txt", "r")
-    timestamp = datetime.now().strftime("%H:%M:%S.%f")
     rawData = file.read()
     if(rawData[-1] == '\n'):
         rawData = rawData[:-2]
-    rawData = rawData + " " + timestamp + " " + str(seqNum)
+    rawData = rawData + " " + str(seqNum)
     print (rawData)
     packet = IP(dst=dstIP, proto=17) / UDP(sport=srcPort, dport=dstPort) / Raw(load=rawData)
     #packet.show()

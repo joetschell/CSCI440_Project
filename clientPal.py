@@ -11,6 +11,7 @@ from time import gmtime, strftime, localtime, sleep, strptime
 from subprocess import call
 
 
+
 #For PER Test
 def custom_action(packet):
     print (packet[0][2].payload)
@@ -65,6 +66,54 @@ def calculateStdDev(avg):
     print (stdDev)
     return stdDev
     
+# def detectError(count):
+#     numErrors = 0
+#     packCount = 0
+#     with open("sniffed_per.txt") as sniffed:
+#         while packCount < 2:
+#             with open("packTemplate.txt") as template:
+#                 print("PACK COUNT: " + str(packCount))
+#                 while 1:
+#                     sniffedChar = sniffed.read(1)
+#                     templateChar = template.read(1)
+#                     print("sniffed: " + sniffedChar + "temp: " + templateChar)
+#                     if(not templateChar):
+#                         sniffedSeqNum = str(sniffed.read().split("\n")[0])
+#                         print("sniffedSeqNum: " + sniffedSeqNum + "packCount: " + str(packCount))
+#                         if(sniffedSeqNum != str(packCount)):
+#                             numErrors += 1
+#                             print("Error 1")
+#                             break
+#                     elif(sniffedChar != templateChar): 
+#                         print("Error 2") 
+#                         numErrors += 1
+#                         break
+#             packCount += 1
+#     print("numErrors: " + str(numErrors))
+
+def detectError(count):
+    numErrors = 0
+    packCount = 0
+    sniffFile =  open("sniffed_per.txt", "r")
+    templateFile = open("packTemplate.txt", "r")
+    template = templateFile.read()
+    packList = sniffFile.read().split("\n")
+    for packCount in range(count):
+        packPayloadAndSeqNum = packList[packCount].rsplit(None, 1)
+        packPayload = packPayloadAndSeqNum[-2]
+        packSeqNum = packPayloadAndSeqNum[-1]
+        if(packPayload !=  template or packSeqNum != str(packCount)):
+            print("packList[" + str(packCount) + "]: " + packPayload + " template: " + template +" || " 
+                   + "packSeqNum: " + packSeqNum + " packCount: " + str(packCount))
+            numErrors += 1
+    print ("numErrors: " + str(numErrors))
+        
+        
+        
+        #
+        #print("new: " + packList[packCount].rsplit(None, 1)[-1])
+            
+            
 
 
 ##Take input from user off the command line
@@ -120,7 +169,9 @@ if(options.test.upper() == "PER"):
         message = str(options.count)
         clientSocket.sendto(message,(serverName, serverPort))
         pkts = sniff(filter="host " +  options.ip + " and port " + str(options.port) + 
-                        " and ip and udp", count=options.count, prn=custom_action)
+                        " and ip and udp", count=options.count*2, prn=custom_action)
+        file.close()
+        detectError(options.count)
 
     #Specify whether to run another test or to quit the program
         while 1:
@@ -133,7 +184,7 @@ if(options.test.upper() == "PER"):
             elif(escape == ""):
                 print ("Ready for new PER test.")
                 break
-    file.close()
+
     clientSocket.close()
 #################################################################################################################
 #                           END OF PACKET ERROR RATE TEST 
@@ -184,7 +235,7 @@ elif(options.test.upper() == "PDV"):
                         " and ip and tcp", count=options.count, prn=custom_action2)
         file2.close()
         avgDelay = calculateAverageDelay()
-        StdDev = calculateStdDev(avgDelay)
+        stdDev = calculateStdDev(avgDelay)
 
         #Specify whether to run another test or to quit the program
         while 1:
