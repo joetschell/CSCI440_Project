@@ -105,7 +105,7 @@ if(options.test.upper() == "PER"):
     while escape != "quit":
         serverName = options.ip
         serverPort = options.port
-        file = open("sniffed.txt", "w")
+        file = open("sniffed_per.txt", "w")
         clientSocket = socket(AF_INET,SOCK_DGRAM)
         print ("PER Test initialized, hit ENTER to begin")
         #Wait for user to press ENTER before beginning the test
