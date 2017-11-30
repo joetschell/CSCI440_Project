@@ -100,13 +100,14 @@ if(options.test.upper() == "PER"):
             if(escape != "" and escape != "quit"):
                 escape = ""
             elif(escape == ""):
-                print ("Ready for new test.")
+                print ("Ready for new PER test.")
                 break
     #reset packet count for subsequent tests  
         count = 0
         iterator = 0
-    #End of Packet Error Rate Measuring
-
+#################################################################################################################
+#                           END OF PACKET ERROR RATE TEST 
+###################################################################################################################
 
 
 #################################################################################################################
@@ -114,7 +115,7 @@ if(options.test.upper() == "PER"):
 #                           PACKET DELAY VARIATION TEST
 #
 #################################################################################################################
-if(options.test.upper() == "PDV"):
+elif(options.test.upper() == "PDV"):
     #Establishing TCP connection for Packet Delay Variation measuring
     serverSocket = socket(AF_INET, SOCK_STREAM)
     serverSocket.bind(('', serverPort))
@@ -126,9 +127,7 @@ if(options.test.upper() == "PDV"):
 
     while escape != "quit": 
         connectionSocket, clientAddress = serverSocket.accept()
-        print ("Socket successfully opened from client")
         count = int(connectionSocket.recv(2048))
-
         print ("count: " + str(count))
         print ("Sending Packets for PDV test...");
         time.sleep(2)
@@ -145,12 +144,12 @@ if(options.test.upper() == "PDV"):
             if(escape != "" and escape != "quit"):
                 escape = ""
             elif(escape == ""):
-                print ("Ready for new test.")
+                print ("Ready for new PDV test.")
                 break
     #reset packet count for subsequent tests  
         count = 0
         iterator = 0
-    #End of Packet Error Rate Measuring
+
     connectionSocket.close()
 
 
