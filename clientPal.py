@@ -15,14 +15,14 @@ import math
 
 #For PER Test
 def custom_action(packet):
-    print (packet[0][2].payload)
+    #print (packet[0][2].payload)
     file.write(str(packet[0][2].payload) + "\n")
 
 #For PDV Test
 def custom_action2(packet):
     timestamp = datetime.now()
     timestampString = timestamp.strftime("%H:%M:%S.%f")
-    print (packet[0][2].payload)
+    #print (packet[0][2].payload)
     file2.write(str(packet[0][2].payload) + " " + timestampString + "\n")
 
 def calculateAverageDelay():
@@ -30,18 +30,18 @@ def calculateAverageDelay():
     with open("sniffed_pdv.txt") as f:
         for line in f:
             temp = line.split()
-            print("temp1: " + temp[1] + " temp2: " + temp[2])
+            #print("temp1: " + temp[1] + " temp2: " + temp[2])
             serverTime = datetime.strptime(temp[1], "%H:%M:%S.%f")
             clientTime = datetime.strptime(temp[2], "%H:%M:%S.%f")
             timeDiff = clientTime - serverTime
             timeDiffString = str(timeDiff)
-            print("timeDiff: " + timeDiffString)
+            #print("timeDiff: " + timeDiffString)
             timeSplit = timeDiffString.split(':')
             hours = timeSplit[0]
             minutes = timeSplit[1]
             seconds = timeSplit[2]
             ms = float(seconds)*1000 + int(minutes)*60000 + int(hours)*3600000
-            print(str(ms) + "ms")
+            #print(str(ms) + "ms")
             avgDelayFile.write(str(ms) + "\n")
     avgDelayFile.close()
     avg = 0
@@ -152,6 +152,7 @@ if(options.test.upper() == "PER"):
         serverPort = options.port
         file = open("sniffed_per.txt", "w")
         clientSocket = socket(AF_INET,SOCK_DGRAM)
+        print("---------------WELCOME TO PACKETPAL-----------------")
         print ("PER Test initialized, hit ENTER to begin")
         #Wait for user to press ENTER before beginning the test
         while 1:
@@ -206,6 +207,7 @@ elif(options.test.upper() == "PDV"):
         file2 = open("sniffed_pdv.txt", "w")
         clientSocket = socket(AF_INET, SOCK_STREAM)
         clientSocket.connect((serverName,serverPort))
+        print("---------------WELCOME TO PACKETPAL-----------------")
         print("PDV Test initialized, hit ENTER to begin.")
         #Wait for user to press ENTER before beginning the test
         while 1:
@@ -222,7 +224,7 @@ elif(options.test.upper() == "PDV"):
         print(ping)
         print("Average round trip time: " + ping[-21:-16])
         oneWayDelay = float(ping[-21:-16])/2
-        print("ONE WAY DELAY: " + str(oneWayDelay) + " --------------------")
+        print("One way delay: " + str(oneWayDelay) + " --------------------")
 
         clientSocket.send(str(options.count)+ " " + str(oneWayDelay))
         pkts = sniff(filter="host " +  options.ip + " and port " + str(options.port) + 
