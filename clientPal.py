@@ -169,7 +169,7 @@ if(options.test.upper() == "PER"):
         message = str(options.count)
         clientSocket.sendto(message,(serverName, serverPort))
         pkts = sniff(filter="host " +  options.ip + " and port " + str(options.port) + 
-                        " and ip and udp", count=options.count*2, prn=custom_action)
+                        " and ip and udp", count=options.count, prn=custom_action)
         file.close()
         detectError(options.count)
 
