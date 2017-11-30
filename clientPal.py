@@ -50,6 +50,21 @@ def calculateAverageDelay():
             lineCount += 1
     avg = avg / lineCount
     print("avg: " + str(avg))
+    return avg
+
+def calculateStdDev(avg):
+    sigma = 0
+    lineCount = 0
+    stdDev = 0
+    with open("avgDelay.txt") as f:
+        for line in f:
+            sigma += pow((float(line) - avg), 2)
+            lineCount += 1
+    stdDev = sigma / lineCount
+    stdDev = math.sqrt(stdDev)
+    print (stdDev)
+    return stdDev
+    
 
 
 ##Take input from user off the command line
@@ -168,7 +183,8 @@ elif(options.test.upper() == "PDV"):
         pkts = sniff(filter="host " +  options.ip + " and port " + str(options.port) + 
                         " and ip and tcp", count=options.count, prn=custom_action2)
         file2.close()
-        calculateAverageDelay()
+        avgDelay = calculateAverageDelay()
+        StdDev = calculateStdDev(avgDelay)
 
         #Specify whether to run another test or to quit the program
         while 1:
