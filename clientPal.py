@@ -9,6 +9,7 @@ from shutil import copyfile
 from socket import *
 from time import gmtime, strftime, localtime, sleep, strptime
 from subprocess import call
+import math
 
 
 
@@ -50,7 +51,7 @@ def calculateAverageDelay():
             avg += float(line)
             lineCount += 1
     avg = avg / lineCount
-    print("avg: " + str(avg))
+    print("Average Delays: " + str(avg))
     return avg
 
 def calculateStdDev(avg):
@@ -63,33 +64,27 @@ def calculateStdDev(avg):
             lineCount += 1
     stdDev = sigma / lineCount
     stdDev = math.sqrt(stdDev)
-    print (stdDev)
+    print ("Standard Deviation: "+ str(stdDev))
     return stdDev
+
+def calculatePDV(avg, stdDev, count):
+    newAvg = 0.0
+    Pdv = 0.0
+    maxx = 0.0
+    minn = 1000
+    with open("avgDelay.txt") as f:
+        for line in f:
+            result = float(line) - avg
+            deviationResult = result - stdDev
+            deviationResult = abs(deviationResult)
+
+            if(deviationResult > maxx):
+                maxx = deviationResult
+            if(deviationResult < minn):
+                minn = deviationResult
+    Pdv = abs(maxx-minn)
+    print("PDV: +/- " + str(Pdv) + "(ms)")
     
-# def detectError(count):
-#     numErrors = 0
-#     packCount = 0
-#     with open("sniffed_per.txt") as sniffed:
-#         while packCount < 2:
-#             with open("packTemplate.txt") as template:
-#                 print("PACK COUNT: " + str(packCount))
-#                 while 1:
-#                     sniffedChar = sniffed.read(1)
-#                     templateChar = template.read(1)
-#                     print("sniffed: " + sniffedChar + "temp: " + templateChar)
-#                     if(not templateChar):
-#                         sniffedSeqNum = str(sniffed.read().split("\n")[0])
-#                         print("sniffedSeqNum: " + sniffedSeqNum + "packCount: " + str(packCount))
-#                         if(sniffedSeqNum != str(packCount)):
-#                             numErrors += 1
-#                             print("Error 1")
-#                             break
-#                     elif(sniffedChar != templateChar): 
-#                         print("Error 2") 
-#                         numErrors += 1
-#                         break
-#             packCount += 1
-#     print("numErrors: " + str(numErrors))
 
 def detectError(count):
     numErrors = 0
@@ -102,13 +97,13 @@ def detectError(count):
         packPayloadAndSeqNum = packList[packCount].rsplit(None, 1)
         packPayload = packPayloadAndSeqNum[-2]
         packSeqNum = packPayloadAndSeqNum[-1]
-        print("pqkdwoun: " + str(packCount))
         if(packPayload !=  template or packSeqNum != str(packCount)):
-            print("packList[" + str(packCount) + "]: " + packPayload + " template: " + template +" || " 
-                   + "packSeqNum: " + packSeqNum + " packCount: " + str(packCount))
+           # print("packList[" + str(packCount) + "]: " + packPayload + " template: " + template +" || " 
+           #        + "packSeqNum: " + packSeqNum + " packCount: " + str(packCount))
             numErrors += 1
    
     Per = float(numErrors)/float(packCount+1) * 100
+    print("-------------YOUR PER TEST RESULTS--------------")
     print("Packets received: " + str(packCount+1))
     print("Packets with errors: " + str(numErrors))
     print("Packet Error Rate: " + format(Per, '.2f') + "%")
@@ -169,6 +164,7 @@ if(options.test.upper() == "PER"):
 
         message = str(options.count)
         clientSocket.sendto(message,(serverName, serverPort))
+        print("Receiving packets from server...")
         pkts = sniff(filter="host " +  options.ip + " and port " + str(options.port) + 
                         " and ip and udp", count=options.count, prn=custom_action)
         file.close()
@@ -223,11 +219,8 @@ elif(options.test.upper() == "PDV"):
         #Start ping to server
         print("Calculating average one way delay...")
         ping = subprocess.check_output(["ping", options.ip, "-c 1"])
-        print("PING START-----------------------------")
         print(ping)
-        print("PING END--------------------------------")
-        print(ping[-21:-16])
-        print("PING DOUBLE END--------------------------")
+        print("Average round trip time: " + ping[-21:-16])
         oneWayDelay = float(ping[-21:-16])/2
         print("ONE WAY DELAY: " + str(oneWayDelay) + " --------------------")
 
@@ -235,8 +228,10 @@ elif(options.test.upper() == "PDV"):
         pkts = sniff(filter="host " +  options.ip + " and port " + str(options.port) + 
                         " and ip and tcp", count=options.count, prn=custom_action2)
         file2.close()
+        print("-------------YOUR PDV TEST RESULTS--------------")
         avgDelay = calculateAverageDelay()
         stdDev = calculateStdDev(avgDelay)
+        calculatePDV(avgDelay, stdDev, options.count)
 
         #Specify whether to run another test or to quit the program
         while 1:
