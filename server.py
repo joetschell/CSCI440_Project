@@ -4,7 +4,7 @@
 
 from __future__ import print_function
 from scapy.all import *
-from datetime import datetime
+from datetime import datetime, timedelta
 import sys
 import optparse
 import os
@@ -26,13 +26,16 @@ def createPERPacket(seqNum, dstIP, dstPort, srcPort):
     file.close()
     return packet
 
-def createPDVPacket(seqNum, dstIP, dstPort, srcPort):
+def createPDVPacket(dstIP, dstPort, srcPort, delay):
     file = open("packTemplate.txt", "r")
-    timestamp = datetime.now().strftime("%H:%M:%S.%f")
+    delta = datetime.strptime(str(delay), '%S.%f')
+    timestamp = datetime.now() 
+    timestamp = timestamp + timedelta(milliseconds=delay) 
+    timestampString = timestamp.strftime("%H:%M:%S.%f")
     rawData = file.read()
     if(rawData[-1] == '\n'):
         rawData = rawData[:-1]
-    rawData = rawData + " " + timestamp + " " + str(seqNum)
+    rawData = rawData + " " + timestampString
     print (rawData)
     packet = IP(dst=dstIP, proto=6) / TCP(sport=srcPort, dport=dstPort) / Raw(load=rawData)
     #packet.show()
@@ -127,12 +130,15 @@ elif(options.test.upper() == "PDV"):
 
     while escape != "quit": 
         connectionSocket, clientAddress = serverSocket.accept()
-        count = int(connectionSocket.recv(2048))
-        print ("count: " + str(count))
+        message = connectionSocket.recv(2048)
+        message = message.split()
+        count = int(message[0])
+        oneWayDelay = float(message[1])
+        print ("count: " + str(count) + " delay: " + str(oneWayDelay))
         print ("Sending Packets for PDV test...");
         time.sleep(2)
         while iterator < count:
-            send(createPDVPacket(iterator, clientAddress[0], clientAddress[1], serverPort))
+            send(createPDVPacket(clientAddress[0], clientAddress[1], serverPort, oneWayDelay))
             iterator += 1
 
         #Specify whether to run another test or to quit the program

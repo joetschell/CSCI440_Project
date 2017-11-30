@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 from __future__ import print_function
 from scapy.all import *
-from datetime import datetime
+from datetime import datetime, timedelta
 import sys
 import optparse
 import os
 from shutil import copyfile
 from socket import *
-from time import gmtime, strftime, localtime, sleep
+from time import gmtime, strftime, localtime, sleep, strptime
 from subprocess import call
 
 
@@ -18,8 +18,39 @@ def custom_action(packet):
 
 #For PDV Test
 def custom_action2(packet):
+    timestamp = datetime.now()
+    timestampString = timestamp.strftime("%H:%M:%S.%f")
     print (packet[0][2].payload)
-    file2.write(str(packet[0][2].payload) + "\n")
+    file2.write(str(packet[0][2].payload) + " " + timestampString + "\n")
+
+def calculateAverageDelay():
+    avgDelayFile = open("avgDelay.txt", "w")
+    with open("sniffed_pdv.txt") as f:
+        for line in f:
+            temp = line.split()
+            print("temp1: " + temp[1] + " temp2: " + temp[2])
+            serverTime = datetime.strptime(temp[1], "%H:%M:%S.%f")
+            clientTime = datetime.strptime(temp[2], "%H:%M:%S.%f")
+            timeDiff = clientTime - serverTime
+            timeDiffString = str(timeDiff)
+            print("timeDiff: " + timeDiffString)
+            timeSplit = timeDiffString.split(':')
+            hours = timeSplit[0]
+            minutes = timeSplit[1]
+            seconds = timeSplit[2]
+            ms = float(seconds)*1000 + int(minutes)*60000 + int(hours)*3600000
+            print(str(ms) + "ms")
+            avgDelayFile.write(str(ms) + "\n")
+    avgDelayFile.close()
+    avg = 0
+    lineCount = 0
+    with open("avgDelay.txt") as f:
+        for line in f:
+            avg += float(line)
+            lineCount += 1
+    avg = avg / lineCount
+    print("avg: " + str(avg))
+
 
 ##Take input from user off the command line
 parser = optparse.OptionParser()
@@ -124,7 +155,7 @@ elif(options.test.upper() == "PDV"):
 
         #Start ping to server
         print("Calculating average one way delay...")
-        ping = subprocess.check_output(["ping", options.ip, "-c 15"])
+        ping = subprocess.check_output(["ping", options.ip, "-c 1"])
         print("PING START-----------------------------")
         print(ping)
         print("PING END--------------------------------")
@@ -133,9 +164,11 @@ elif(options.test.upper() == "PDV"):
         oneWayDelay = float(ping[-21:-16])/2
         print("ONE WAY DELAY: " + str(oneWayDelay) + " --------------------")
 
-        clientSocket.send(str(options.count))
+        clientSocket.send(str(options.count)+ " " + str(oneWayDelay))
         pkts = sniff(filter="host " +  options.ip + " and port " + str(options.port) + 
                         " and ip and tcp", count=options.count, prn=custom_action2)
+        file2.close()
+        calculateAverageDelay()
 
         #Specify whether to run another test or to quit the program
         while 1:
@@ -149,5 +182,5 @@ elif(options.test.upper() == "PDV"):
                 print ("Ready for new PDV test.")
                 break
 
-    file2.close()
+    
     clientSocket.close()
