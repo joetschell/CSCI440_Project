@@ -102,17 +102,18 @@ def detectError(count):
         packPayloadAndSeqNum = packList[packCount].rsplit(None, 1)
         packPayload = packPayloadAndSeqNum[-2]
         packSeqNum = packPayloadAndSeqNum[-1]
+        print("pqkdwoun: " + str(packCount))
         if(packPayload !=  template or packSeqNum != str(packCount)):
             print("packList[" + str(packCount) + "]: " + packPayload + " template: " + template +" || " 
                    + "packSeqNum: " + packSeqNum + " packCount: " + str(packCount))
             numErrors += 1
-    print ("numErrors: " + str(numErrors))
-        
-        
-        
-        #
-        #print("new: " + packList[packCount].rsplit(None, 1)[-1])
-            
+   
+    Per = float(numErrors)/float(packCount+1) * 100
+    print("Packets received: " + str(packCount+1))
+    print("Packets with errors: " + str(numErrors))
+    print("Packet Error Rate: " + format(Per, '.2f') + "%")
+    sniffFile.close()
+    templateFile.close()
             
 
 
