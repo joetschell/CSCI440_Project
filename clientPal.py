@@ -40,7 +40,7 @@ def calculateAverageDelay():
             hours = timeSplit[0]
             minutes = timeSplit[1]
             seconds = timeSplit[2]
-            ms = float(seconds)*1000 + int(minutes)*60000 + int(hours)*3600000
+            ms = float(seconds)*1000 + float(minutes)*60000 + float(hours)*3600000
             #print(str(ms) + "ms")
             avgDelayFile.write(str(ms) + "\n")
     avgDelayFile.close()
