@@ -144,6 +144,7 @@ if (options.test.upper() != "PER" and options.test.upper() != "PDV"):
 #
 ##########################################################################################################
 if(options.test.upper() == "PER"):
+    print("---------------WELCOME TO PACKETPAL-----------------")
     escape = ""
     begin = "a"
     #allows the user to keep running tests until "quit" is enterd
@@ -152,7 +153,6 @@ if(options.test.upper() == "PER"):
         serverPort = options.port
         file = open("sniffed_per.txt", "w")
         clientSocket = socket(AF_INET,SOCK_DGRAM)
-        print("---------------WELCOME TO PACKETPAL-----------------")
         print ("PER Test initialized, hit ENTER to begin")
         #Wait for user to press ENTER before beginning the test
         while 1:
@@ -200,7 +200,7 @@ if(options.test.upper() == "PER"):
 elif(options.test.upper() == "PDV"):
     escape = ""
     begin = "a"
-
+    print("---------------WELCOME TO PACKETPAL-----------------")
     #allows the user to keep running tests until "quit" is enterd
     while escape != "quit":
         serverName = options.ip
@@ -208,7 +208,6 @@ elif(options.test.upper() == "PDV"):
         file2 = open("sniffed_pdv.txt", "w")
         clientSocket = socket(AF_INET, SOCK_STREAM)
         clientSocket.connect((serverName,serverPort))
-        print("---------------WELCOME TO PACKETPAL----------------")
         print("PDV Test initialized, hit ENTER to begin.")
         #Wait for user to press ENTER before beginning the test
         while 1:
