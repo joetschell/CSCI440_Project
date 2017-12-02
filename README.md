@@ -46,9 +46,9 @@ Scapy
 
 ### Known Bugs ###
 - When trying to run the PacketPal on localhost, two copies of each packet are received on the client side.  This causes the first packet received to be the only one capable of not having errors.  Since a packet out of order is considered an error, every packet after the first will be out of order because of this.
-- When running the packet error rate on GENI, occasionally the first packet received will not be one sent from the server.  The origin and cause of the packet is unknown.  The payload of the packet is a garbage string of characters in a another encoding.  Here is an example of one such payload:
+- When running the packet error rate on GENI, occasionally the first packet received will not be one sent from the server.  The origin and cause of the packet is unknown.  The payload of the packet is a garbage string of characters in a another encoding.  This issues can either cause the program to crash on the client, or give an error rate of 100%, if this is the first packet received. Here is an example of one such payload:
 
 (pøû<9d>w^O<86>4%üaú1^_<97>þÀ<8c>×^?¦n÷söâ^EF)n|ÃÞ<99>¢^S<86><9e>áóü©ï^U<<9e>þð¾ÃTo°R¯:óE^W7ÆªíZa¿^ZYS^Dl<87>[wf=È^BÄ^Wÿd#Ê¬i°»æÇÒ
 
-This issues can either cause the program to crash on the client, or give an error rate of 100%, if this is the first packet received.
+
 
