@@ -51,7 +51,7 @@ def calculateAverageDelay():
             avg += float(line)
             lineCount += 1
     avg = avg / lineCount
-    print("Average Delays: " + str(avg))
+    print("Average Delay: " + str(avg))
     return avg
 
 def calculateStdDev(avg):
@@ -103,7 +103,7 @@ def detectError(count):
             numErrors += 1
    
     Per = float(numErrors)/float(packCount+1) * 100
-    print("-------------YOUR PER TEST RESULTS--------------")
+    print("---------------YOUR PER TEST RESULTS---------------")
     print("Packets received: " + str(packCount+1))
     print("Packets with errors: " + str(numErrors))
     print("Packet Error Rate: " + format(Per, '.2f') + "%")
@@ -170,12 +170,13 @@ if(options.test.upper() == "PER"):
                         " and ip and udp", count=options.count, prn=custom_action)
         file.close()
         detectError(options.count)
+        print("---------------------------------------------------")
 
     #Specify whether to run another test or to quit the program
         while 1:
             escape = raw_input("Hit ENTER to run another PER test or type \"quit\" to stop\n")
             if(escape == "quit"):
-                print ("Thank You")
+                print ("---------------THANK YOU FOR USING PACKETPAL---------------")
                 break
             if(escape != "" and escape != "quit"):
                 escape = ""
@@ -207,7 +208,7 @@ elif(options.test.upper() == "PDV"):
         file2 = open("sniffed_pdv.txt", "w")
         clientSocket = socket(AF_INET, SOCK_STREAM)
         clientSocket.connect((serverName,serverPort))
-        print("---------------WELCOME TO PACKETPAL-----------------")
+        print("---------------WELCOME TO PACKETPAL----------------")
         print("PDV Test initialized, hit ENTER to begin.")
         #Wait for user to press ENTER before beginning the test
         while 1:
@@ -219,27 +220,29 @@ elif(options.test.upper() == "PDV"):
                 break
 
         #Start ping to server
-        print("Calculating average one way delay...")
-        ping = subprocess.check_output(["ping", options.ip, "-c 1"])
-        print(ping)
+        print("Calculating average one way delay...\n")
+        ping = subprocess.check_output(["ping", options.ip, "-c 15"])
+        #print(ping)
         print("Average round trip time: " + ping[-21:-16])
         oneWayDelay = float(ping[-21:-16])/2
-        print("One way delay: " + str(oneWayDelay) + " --------------------")
-
+        print("One way delay: " + str(oneWayDelay) + "\n")
+        
         clientSocket.send(str(options.count)+ " " + str(oneWayDelay))
+        print("Receiving packets from server...")
         pkts = sniff(filter="host " +  options.ip + " and port " + str(options.port) + 
                         " and ip and tcp", count=options.count, prn=custom_action2)
         file2.close()
-        print("-------------YOUR PDV TEST RESULTS--------------")
+        print("---------------YOUR PDV TEST RESULTS---------------")
         avgDelay = calculateAverageDelay()
         stdDev = calculateStdDev(avgDelay)
         calculatePDV(avgDelay, stdDev, options.count)
+        print("---------------------------------------------------")
 
         #Specify whether to run another test or to quit the program
         while 1:
             escape = raw_input("Hit ENTER to run another PDV test or type \"quit\" to stop\n")
             if(escape == "quit"):
-                print ("Thank You")
+                print ("---------------THANK YOU FOR USING PACKETPAL---------------")
                 break
             if(escape != "" and escape != "quit"):
                 escape = ""
